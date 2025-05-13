@@ -14,14 +14,13 @@ const Index = () => {
   const [result, setResult] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
-
-  // TODO: write better prompts
   
   const TASK_PROMPTS = {
-    diacritization: "Diacritize the following Arabic text:",
-    erab: "اعرب الجملة الاتية: ",
+    diacritization:
+      " قم بتشكيل الجملة بناء على القواعد الاعرابية لكن لا تعرب الجملة فقط اكتب الجملة مشكلة. ولا تكتب اي جمله اخرى:\n",
+    erab: "اعرب الجملة الاتية: \n",
     correctness:
-      "Check and correct any grammatical or spelling errors in the following Arabic text:",
+      "قم بتصحيح الاخطاء اللغوية بناء على القواعد اللغوية و الاعرابية ولا تشكل الجملة ولا تعرب الجملة ثم اكتب الجملة مصححه والكلمات الخاطئة وتصحيحها",
   };
 
   const handleTextChange = (e) => {
@@ -47,13 +46,13 @@ const Index = () => {
     setIsProcessing(true);
     
     try {
-      const prompt = `${TASK_PROMPTS[task]} ${text}`
+      const prompt = `${TASK_PROMPTS[task]} "${text}"`
       const result = await getGeminiResponse(prompt)
       console.log(result)
       setResult(result);
       toast({
-        title: "تمت المعالجة بنجاح",
-        description: "تم معالجة النص بنجاح",
+        title: "تمت معالجة النص بنجاح",
+        description: "",
       });
     } catch (error) {
       toast({
