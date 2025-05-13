@@ -55,8 +55,8 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen arabic-pattern-bg">
-      <div className="container py-8">
+    <div className="min-h-screen arabic-pattern-bg flex flex-col">
+      <div className="container py-8 flex-grow">
         <div className="flex flex-col space-y-8 max-w-4xl mx-auto">
           <div className="text-center space-y-2">
             <h1 className="text-4xl md:text-5xl font-bold text-arabicBlue arabic-text">
@@ -98,7 +98,7 @@ const Index = () => {
             </form>
           </div>
           
-          <footer className="text-center text-sm text-muted-foreground">
+          <footer className="text-center text-sm text-muted-foreground mt-auto">
             <p>© 2025 معالج النصوص العربية - جميع الحقوق محفوظة</p>
           </footer>
         </div>
