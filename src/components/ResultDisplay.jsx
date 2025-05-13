@@ -2,7 +2,7 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import ReactMarkdown from "react-markdown";
 const ResultDisplay = ({ result, isLoading, task }) => {
   const getTitleByTask = () => {
     switch (task) {
@@ -31,7 +31,9 @@ const ResultDisplay = ({ result, isLoading, task }) => {
               <Skeleton className="h-6 w-4/5" />
             </div>
           ) : result ? (
-            <div className="arabic-text text-lg whitespace-pre-wrap min-h-48">{result}</div>
+            <div className="arabic-text text-lg whitespace-pre-wrap min-h-48">
+              {<ReactMarkdown>{result}</ReactMarkdown>}
+            </div>
           ) : (
             <p className="text-muted-foreground text-center arabic-text min-h-48 flex items-center justify-center">
               ستظهر النتيجة هنا بعد المعالجة
