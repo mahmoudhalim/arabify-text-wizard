@@ -17,7 +17,7 @@ const TaskRadioGroup = ({ value, onChange }) => {
       <RadioGroup
         value={value}
         onValueChange={onChange}
-        className="grid grid-cols-3 gap-3"
+        className="flex flex-row justify-center gap-4"
       >
         {tasks.map((task) => (
           <div key={task.id} className="relative">

@@ -83,7 +83,7 @@ const Index = () => {
               <div className="rtl">
                 <Button
                   type="submit"
-                  className="bg-arabicBlue hover:bg-arabicBlue-dark text-white w-full"
+                  className="bg-arabicGold hover:bg-arabicGold/80 text-arabicBlue font-bold text-lg py-3 w-full"
                   disabled={isProcessing}
                 >
                   {isProcessing ? "جاري المعالجة..." : "معالجة النص"}
