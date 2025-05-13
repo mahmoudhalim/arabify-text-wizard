@@ -57,7 +57,7 @@ const Index = () => {
   return (
     <div className="min-h-screen arabic-pattern-bg flex flex-col">
       <div className="container py-8 flex-grow">
-        <div className="flex flex-col space-y-8 max-w-4xl mx-auto">
+        <div className="flex flex-col space-y-8 max-w-4xl mx-auto h-full">
           <div className="text-center space-y-2">
             <h1 className="text-4xl md:text-5xl font-bold text-arabicBlue arabic-text">
               معالج النصوص العربية
@@ -67,34 +67,36 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="bg-card shadow-lg rounded-lg p-6 animate-fade-in">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="bg-card shadow-lg rounded-lg p-6 animate-fade-in flex-grow flex flex-col">
+            <form onSubmit={handleSubmit} className="space-y-6 flex flex-col flex-grow">
               <TaskRadioGroup
                 value={task}
                 onChange={handleTaskChange}
               />
               
-              <ArabicTextInput
-                value={text}
-                onChange={handleTextChange}
-                isProcessing={isProcessing}
-              />
-              
-              <div className="rtl">
-                <Button
-                  type="submit"
-                  className="bg-arabicGold hover:bg-arabicGold/80 text-arabicBlue font-bold text-lg py-3 w-full"
-                  disabled={isProcessing}
-                >
-                  {isProcessing ? "جاري المعالجة..." : "معالجة النص"}
-                </Button>
+              <div className="flex-grow flex flex-col space-y-6">
+                <ArabicTextInput
+                  value={text}
+                  onChange={handleTextChange}
+                  isProcessing={isProcessing}
+                />
+                
+                <div className="rtl">
+                  <Button
+                    type="submit"
+                    className="bg-arabicGold hover:bg-arabicGold/80 text-arabicBlue font-bold text-lg py-3 w-full"
+                    disabled={isProcessing}
+                  >
+                    {isProcessing ? "جاري المعالجة..." : "معالجة النص"}
+                  </Button>
+                </div>
+                
+                <ResultDisplay
+                  result={result}
+                  isLoading={isProcessing}
+                  task={task}
+                />
               </div>
-              
-              <ResultDisplay
-                result={result}
-                isLoading={isProcessing}
-                task={task}
-              />
             </form>
           </div>
           

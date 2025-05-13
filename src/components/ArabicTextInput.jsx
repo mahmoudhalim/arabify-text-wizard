@@ -14,7 +14,7 @@ const ArabicTextInput = ({ value, onChange, isProcessing }) => {
         placeholder="اكتب النص العربي هنا..."
         value={value}
         onChange={onChange}
-        className="min-h-32 arabic-text text-lg"
+        className="min-h-48 arabic-text text-lg w-full"
         disabled={isProcessing}
         dir="rtl"
       />
