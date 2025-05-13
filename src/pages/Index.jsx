@@ -6,6 +6,7 @@ import { processArabicText } from "@/services/llmService";
 import TaskRadioGroup from "@/components/TaskRadioGroup";
 import ArabicTextInput from "@/components/ArabicTextInput";
 import ResultDisplay from "@/components/ResultDisplay";
+import { getGeminiResponse } from "../services/gemini";
 
 const Index = () => {
   const [text, setText] = useState("");
@@ -13,6 +14,15 @@ const Index = () => {
   const [result, setResult] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
+
+  // TODO: write better prompts
+  
+  const TASK_PROMPTS = {
+    diacritization: "Diacritize the following Arabic text:",
+    erab: "اعرب الجملة الاتية: ",
+    correctness:
+      "Check and correct any grammatical or spelling errors in the following Arabic text:",
+  };
 
   const handleTextChange = (e) => {
     setText(e.target.value);
@@ -37,7 +47,9 @@ const Index = () => {
     setIsProcessing(true);
     
     try {
-      const { result } = await processArabicText(text, task);
+      const prompt = `${TASK_PROMPTS[task]} ${text}`
+      const result = await getGeminiResponse(prompt)
+      console.log(result)
       setResult(result);
       toast({
         title: "تمت المعالجة بنجاح",
