@@ -69,15 +69,15 @@ const Index = () => {
 
           <div className="bg-card shadow-lg rounded-lg p-6 animate-fade-in">
             <form onSubmit={handleSubmit} className="space-y-6">
+              <TaskRadioGroup
+                value={task}
+                onChange={handleTaskChange}
+              />
+              
               <ArabicTextInput
                 value={text}
                 onChange={handleTextChange}
                 isProcessing={isProcessing}
-              />
-              
-              <TaskRadioGroup
-                value={task}
-                onChange={handleTaskChange}
               />
               
               <div className="rtl">

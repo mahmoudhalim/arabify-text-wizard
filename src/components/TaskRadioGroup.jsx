@@ -12,12 +12,12 @@ const TaskRadioGroup = ({ value, onChange }) => {
   ];
 
   return (
-    <div className="space-y-4 rtl">
-      <h3 className="text-lg font-bold text-arabicBlue">اختر المهمة:</h3>
+    <div className="space-y-3 rtl">
+      <h3 className="text-lg font-medium text-arabicBlue">اختر المهمة:</h3>
       <RadioGroup
         value={value}
         onValueChange={onChange}
-        className="grid grid-cols-1 md:grid-cols-3 gap-4"
+        className="grid grid-cols-3 gap-3"
       >
         {tasks.map((task) => (
           <div key={task.id} className="relative">
@@ -29,13 +29,13 @@ const TaskRadioGroup = ({ value, onChange }) => {
             <Label
               htmlFor={task.id}
               className={cn(
-                "flex flex-col items-center justify-between rounded-lg border-2 border-muted p-4 hover:bg-accent/10 hover:text-accent-foreground",
-                "peer-data-[state=checked]:border-arabicGold peer-data-[state=checked]:bg-accent/20",
-                "cursor-pointer transition-all"
+                "flex flex-col items-center justify-center rounded-lg border-2 border-muted p-3 hover:bg-accent/10 hover:text-accent-foreground",
+                "peer-data-[state=checked]:border-arabicGold peer-data-[state=checked]:bg-arabicGold/10 peer-data-[state=checked]:text-arabicGold",
+                "cursor-pointer transition-all text-center"
               )}
             >
-              <div className="mb-2 text-xl font-bold">{task.name}</div>
-              <p className="text-sm text-muted-foreground">{task.description}</p>
+              <div className="font-bold">{task.name}</div>
+              <p className="text-xs text-muted-foreground mt-1 hidden md:block">{task.description}</p>
             </Label>
           </div>
         ))}
