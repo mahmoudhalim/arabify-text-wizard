@@ -60,7 +60,7 @@ const ArabicTextInput = ({
           className="flex items-center gap-2"
         >
           <Camera className="h-4 w-4" />
-          <span>التقاط صورة</span>
+          <span>استخراج النص من صورة</span>
         </Button>
       </div>
       

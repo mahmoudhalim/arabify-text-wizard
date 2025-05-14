@@ -1,6 +1,6 @@
 
 import React, { useRef, useState } from "react";
-import { Camera } from "lucide-react";
+import { Camera, Upload } from "lucide-react";
 import { performOCR } from "@/utils/ocr";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -16,13 +16,15 @@ const CameraDialog = ({ isOpen, onClose, onTextExtracted }) => {
   const { toast } = useToast();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [stream, setStream] = useState(null);
   const [isCapturing, setIsCapturing] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [activeTab, setActiveTab] = useState('camera'); // 'camera' or 'upload'
   
-  // Start the camera when dialog opens
+  // Start the camera when dialog opens and camera tab is active
   React.useEffect(() => {
-    if (isOpen) {
+    if (isOpen && activeTab === 'camera') {
       startCamera();
     } else if (stream) {
       stopCamera();
@@ -31,7 +33,7 @@ const CameraDialog = ({ isOpen, onClose, onTextExtracted }) => {
     return () => {
       if (stream) stopCamera();
     };
-  }, [isOpen]);
+  }, [isOpen, activeTab]);
   
   const startCamera = async () => {
     setIsCapturing(true);
@@ -83,11 +85,27 @@ const CameraDialog = ({ isOpen, onClose, onTextExtracted }) => {
     canvas.toBlob(processOCR, "image/jpeg", 0.95);
   };
   
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "خطأ",
+        description: "الرجاء اختيار ملف صورة صالح",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    processOCR(file);
+  };
+  
   const processOCR = async (blob) => {
     setIsProcessing(true);
     try {
-      // Create a File object from the blob
-      const imageFile = new File([blob], "camera-capture.jpg", { type: "image/jpeg" });
+      // Create a File object from the blob if it's not already a File
+      const imageFile = blob instanceof File ? blob : new File([blob], "camera-capture.jpg", { type: "image/jpeg" });
       
       // Perform OCR on the image
       const extractedText = await performOCR(imageFile);
@@ -113,32 +131,92 @@ const CameraDialog = ({ isOpen, onClose, onTextExtracted }) => {
     }
   };
   
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="text-center arabic-text">التقاط صورة للنص العربي</DialogTitle>
+          <DialogTitle className="text-center arabic-text">استخراج النص من الصورة</DialogTitle>
         </DialogHeader>
         
         <div className="flex flex-col items-center space-y-4">
-          <div className="relative w-full aspect-video overflow-hidden rounded-md bg-muted">
-            <video 
-              ref={videoRef} 
-              className="w-full h-full object-cover" 
-              autoPlay 
-              playsInline
-            />
-            <canvas ref={canvasRef} className="hidden" />
+          {/* Tab Navigation */}
+          <div className="flex w-full border-b mb-4">
+            <button 
+              className={`flex-1 py-2 text-center font-medium ${activeTab === 'camera' ? 'text-arabicGold border-b-2 border-arabicGold' : 'text-gray-500'}`}
+              onClick={() => setActiveTab('camera')}
+            >
+              <Camera className="inline-block w-4 h-4 mr-1" />
+              التقاط صورة
+            </button>
+            <button 
+              className={`flex-1 py-2 text-center font-medium ${activeTab === 'upload' ? 'text-arabicGold border-b-2 border-arabicGold' : 'text-gray-500'}`}
+              onClick={() => setActiveTab('upload')}
+            >
+              <Upload className="inline-block w-4 h-4 mr-1" />
+              تحميل صورة
+            </button>
           </div>
           
+          {/* Camera View */}
+          {activeTab === 'camera' && (
+            <div className="relative w-full aspect-video overflow-hidden rounded-md bg-muted">
+              <video 
+                ref={videoRef} 
+                className="w-full h-full object-cover" 
+                autoPlay 
+                playsInline
+              />
+              <canvas ref={canvasRef} className="hidden" />
+            </div>
+          )}
+          
+          {/* File Upload View */}
+          {activeTab === 'upload' && (
+            <div className="flex flex-col items-center justify-center w-full aspect-video bg-muted rounded-md border-2 border-dashed border-gray-300 p-6">
+              <Upload className="w-12 h-12 text-gray-400 mb-2" />
+              <p className="text-center text-gray-500 mb-4">اضغط هنا لاختيار صورة</p>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              <Button 
+                onClick={triggerFileInput}
+                variant="outline"
+                disabled={isProcessing}
+              >
+                اختيار صورة
+              </Button>
+            </div>
+          )}
+          
           <DialogFooter className="w-full flex flex-col sm:flex-row gap-2">
-            <Button
-              onClick={captureImage}
-              className="bg-arabicGold hover:bg-arabicGold/80 text-arabicBlue font-bold"
-              disabled={!isCapturing || isProcessing}
-            >
-              {isProcessing ? "جاري معالجة الصورة..." : "التقاط صورة"}
-            </Button>
+            {activeTab === 'camera' && (
+              <Button
+                onClick={captureImage}
+                className="bg-arabicGold hover:bg-arabicGold/80 text-arabicBlue font-bold"
+                disabled={!isCapturing || isProcessing}
+              >
+                {isProcessing ? "جاري معالجة الصورة..." : "التقاط صورة"}
+              </Button>
+            )}
+            
+            {activeTab === 'upload' && (
+              <Button
+                onClick={triggerFileInput}
+                className="bg-arabicGold hover:bg-arabicGold/80 text-arabicBlue font-bold"
+                disabled={isProcessing}
+              >
+                {isProcessing ? "جاري معالجة الصورة..." : "اختيار صورة"}
+              </Button>
+            )}
+            
             <Button variant="outline" onClick={onClose}>
               إلغاء
             </Button>
