@@ -10,7 +10,8 @@ const getGeminiResponse = async (query) => {
     model: "gemini-2.0-flash",
     contents: `${query}`,
   });
-  return response.candidates[0].content.parts[0].text;
+  console.log(response)
+  return response.candidates[0].content.parts[0].text || "";
 }
 
 export { getGeminiResponse }

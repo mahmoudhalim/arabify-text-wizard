@@ -7,7 +7,7 @@ import TaskRadioGroup from "@/components/TaskRadioGroup";
 import ArabicTextInput from "@/components/ArabicTextInput";
 import ResultDisplay from "@/components/ResultDisplay";
 import { getGeminiResponse } from "../services/gemini";
-
+import { getLlamaResponse } from "../services/llama";
 const Index = () => {
   const [text, setText] = useState("");
   const [task, setTask] = useState("diacritization");
@@ -18,7 +18,7 @@ const Index = () => {
   const TASK_PROMPTS = {
     diacritization:
       " قم بتشكيل الجملة بناء على القواعد الاعرابية لكن لا تعرب الجملة فقط اكتب الجملة مشكلة. ولا تكتب اي جمله اخرى:\n",
-    erab: "اعرب الجملة الاتية: \n",
+    erab: " اعرب الجملة الاتية بالتفصيل: اكتب الاعراب فقط لا تكتب جمل اخري \n",
     correctness:
       "قم بتصحيح الاخطاء اللغوية بناء على القواعد اللغوية و الاعرابية ولا تشكل الجملة ولا تعرب الجملة ثم اكتب الجملة مصححه والكلمات الخاطئة وتصحيحها",
   };
@@ -47,9 +47,10 @@ const Index = () => {
     
     try {
       const prompt = `${TASK_PROMPTS[task]} "${text}"`
-      const result = await getGeminiResponse(prompt)
-      console.log(result)
-      setResult(result);
+      const geminiResult = await getGeminiResponse(prompt)
+      // const llamaResult = await getLlamaResponse(prompt);
+      // console.log(llamaResult);
+      setResult(geminiResult);
       toast({
         title: "تمت معالجة النص بنجاح",
         description: "",
