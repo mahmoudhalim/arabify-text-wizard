@@ -8,12 +8,14 @@ export async function performOCR(imageFile) {
     const worker = await createWorker('ara');
     
     // Recognize text in the image
-    const { data: { text } } = await worker.recognize(imageFile);
-    
+    const response = await worker.recognize(imageFile, {
+      lang: "ara",
+    });
+    console.log(response);
     // Terminate the worker
     await worker.terminate();
     
-    return text;
+    return response.data.text;
   } catch (error) {
     console.error("OCR Error:", error);
     throw new Error("فشل في استخراج النص من الصورة");

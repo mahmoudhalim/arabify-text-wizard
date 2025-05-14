@@ -9,7 +9,7 @@ import { getLlamaResponse } from "../services/llama";
 
 const Index = () => {
   const [text, setText] = useState("");
-  const [task, setTask] = useState("diacritization");
+  const [task, setTask] = useState("erab");
   const [result, setResult] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();
