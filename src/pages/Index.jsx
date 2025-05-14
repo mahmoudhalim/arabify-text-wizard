@@ -1,13 +1,12 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { processArabicText } from "@/services/llmService";
 import TaskRadioGroup from "@/components/TaskRadioGroup";
 import ArabicTextInput from "@/components/ArabicTextInput";
 import ResultDisplay from "@/components/ResultDisplay";
 import { getGeminiResponse } from "../services/gemini";
 import { getLlamaResponse } from "../services/llama";
+
 const Index = () => {
   const [text, setText] = useState("");
   const [task, setTask] = useState("diacritization");
@@ -47,15 +46,14 @@ const Index = () => {
     
     try {
       const prompt = `${TASK_PROMPTS[task]} "${text}"`
-      const geminiResult = await getGeminiResponse(prompt)
-      // const llamaResult = await getLlamaResponse(prompt);
-      // console.log(llamaResult);
+      const geminiResult = await getGeminiResponse(prompt);
       setResult(geminiResult);
       toast({
         title: "تمت معالجة النص بنجاح",
         description: "",
       });
     } catch (error) {
+      console.error("Processing error:", error);
       toast({
         title: "خطأ",
         description: error.message || "حدث خطأ أثناء معالجة النص",
